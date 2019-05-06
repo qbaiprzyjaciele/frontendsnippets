@@ -1,0 +1,86 @@
+<html> 
+<head>
+    <title>ajax</title>
+    <script>
+        function AjaxUtil(scope) {
+            this.scope = scope;
+        }
+
+        AjaxUtil.prototype.createRequest = function() {
+            return new XMLHttpRequest();
+        }
+
+        AjaxUtil.prototype.open = function(reqType,url,reqBody) {
+            var req = this.createRequest();
+            req.open(reqType,url,true);
+            return req;
+        }
+
+        AjaxUtil.prototype.get = function(url, sucess, error) {
+            var req = this.open("GET",url);
+            req.onreadystatechange = function() {
+                if(this.readyState == 4) {
+                    if(this.status  == 200) {
+                        sucess(this.responseText);
+                    }
+                    else {
+                        error(this.responseText);
+                    }
+                } 
+            }   
+        }
+
+        function RequestBuilder(url) {
+            this.url = url;
+            this.urlParams = {};
+            this.queryParams = {};
+        }
+
+        RequestBuilder.prototype.urlParam  = function(name,value) {
+           this.urlParams[name] = value;
+           return this;
+        }
+
+        RequestBuilder.prototype.queryParam = function(name,value) {
+            this.queryParam[name] = value;
+            return this;
+        }
+
+        RequestBuilder.prototype.build = function() {
+            var queryString = '?';
+            for(var key in this.queryParams) {
+                queryString += (key + '=' +this.queryParams[key]);
+            }
+        }
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200) {
+                var accounts = JSON.parse(responseText);
+                document.getElementById("accounts");
+                var table = document.createElement("table");
+                for(var i=0; i<accounts.length; i++) {
+                    var tr  = document.createElement("tr");
+                    tr.innerHTML= "<td>" + accounts.name   +"</td>" + "<td>" + accounts.no + "</td>";
+                    table.appendChild(tr);
+                }
+            }
+        }
+        xhttp.open('GET','http://localhost:8081/test', true);
+        xhttp.send();
+
+        var ajax = new AjaxUtil(this);
+
+        ajax.get("http://localhost:3000", function(res) {
+            
+        },function(res) {
+
+        });
+
+    </script>
+</head>
+
+<body>
+
+</body>    
+</html>

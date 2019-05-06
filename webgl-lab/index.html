@@ -1,0 +1,54 @@
+<html>
+<head>
+    <script>
+        function start() {
+            var canvas = document.getElementById("mainCanvas");
+            gl = initWebGL(canvas);
+
+            if(gl) {
+                gl.clearColor(0.0, 0.0, 0.0, 1.0);
+                gl.enable(g.DEPTH_TEST);
+                gl.depthFunc(gl.LEQUAL);
+                gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+
+        }
+
+        function initWebGL(canvas) {
+            var gl = null;
+            try {
+                gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+            }
+            catch(e) {
+                console.log('error', e);
+            }
+            return gl;
+        }
+        var faces = [];
+        var vertices = [];
+        var normals = [];
+
+        function parseLine(line) {
+            if(line.startsWith('f')) {
+                var facesIndices = lines.split(" ");
+                faces.push(new Array([facesIndices[1],facesIndices[2], facesIndices[3], facesIndices[4]]));
+            }
+            else if(line.startsWith("v")) {
+                var vertex = lines.split(" ");
+                vertices.push( new Array([vertes[1], vertex[2], vertex[3]]));
+            }
+        }
+    </script>
+</head>
+
+<body onload="start()">
+
+    <canvas id="mainCanvas" width="640" height="480">
+
+
+    </canvas>
+    
+</body>
+
+</html>

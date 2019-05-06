@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>prototypes 2</title>
+    </head>
+
+    <body>
+    <script>        
+        function DataWriter(data) {
+            this.data = data;
+        }
+
+        DataWriter.prototype.getSize = function() {
+            console.log("data writer getSize");
+        }
+
+        DataWriter.prototype.writeData = function() {
+            console.log("data:" + this.data);
+        }
+
+        function FileDataWriter(data ) {
+            DataWriter.call(this,data);
+        }
+        
+        FileDataWriter.prototype = new DataWriter;
+
+        FileDataWriter.prototype.writeData = function() {
+            DataWriter.prototype.writeData.call(this);
+            console.log("additional info");
+        }
+        var dataW = new DataWriter("kkkkk");
+        var dw = new FileDataWriter("wdwdwdxdwxfwxwxwfxdwdxwdx");
+        dw.getSize();
+        dw.writeData();
+        dataW.writeData();
+
+    </script>    
+    </body>
+    
+</html>

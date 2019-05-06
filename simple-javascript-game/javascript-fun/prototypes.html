@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <title>javascript prototypes</title>
+        <script type="text/javascript" src ="prototypes.js"/>
+        <script>
+            
+        </script>            
+    </head>
+    <body>
+        <div id="scriptOutput">
+        </div>
+        <script>
+            var doTest = function() {
+                var person = new Person("Ann","Smith");
+                document.getElementById("scriptOutput").innerHTML += person.nameAndLastName();
+
+                function Employee(name,lastName) {    
+                    this.name = name;
+                    this.lastName = lastName;
+                }
+
+                function Employer(name,lastName) {
+                    this.name = name;
+                    this.lastName = lastName;
+                }
+
+                Employer.prototype = Object.create(new Person());
+
+                Employee.prototype = Person.prototype;
+                var employee = new Employee("maria", "anderson"); 
+                
+                document.getElementById("scriptOutput").innerHTML += person.nameAndLastName();
+                
+                document.getElementById("scriptOutput").innerHTML += person.nameAndLastName();
+                document.getElementById("scriptOutput").innerHTML += employee.nameAndLastName();  
+
+
+                document.getElementById("scriptOutput").innerHTML += person.nameAndLastName();
+                document.getElementById("scriptOutput").innerHTML += employee.nameAndLastName();  
+
+                Employee.nameAndLastName = function() {
+                    return "employee  2";
+                }
+
+                document.getElementById("scriptOutput").innerHTML += person.nameAndLastName();
+                document.getElementById("scriptOutput").innerHTML += employee.nameAndLastName();  
+
+                var employer = new Employer("John", "Smith");
+                document.getElementById("scriptOutput").innerHTML += employer.nameAndLastName();
+
+                Employer.prototype.nameAndLastName = function() {
+                    return "name: " + this.name + " lastName:" + this.lastName;
+                }
+
+                document.getElementById("scriptOutput").innerHTML += "<br>" + employer.nameAndLastName();
+                document.getElementById("scriptOutput").innerHTML += "<br>" +  person.nameAndLastName();
+
+            }
+
+            doTest();
+        </script>
+    </body>
+</html>

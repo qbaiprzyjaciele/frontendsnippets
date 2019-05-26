@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="taskboard-flex.css"/>  
+    </head>
+    <body class="main">
+        <div class="container row">
+            <div class="column" id="todo">
+                <div class="board-header">
+                    To Do
+                </div>
+                <div class="sticky-space">
+                    <div class="sticky-note note-green">
+                        Note 1
+                    </div>
+                    <div class="sticky-note note-red">
+                        Note 2
+                    </div>
+                    <div class="sticky-note note-orange">
+                        Note 3
+                    </div>
+                    <div class="sticky-note note-orange">
+                        Note 4
+                    </div>
+                </div>
+            </div>
+            <div class="column" id="in_progress">
+                <div class="board-header">
+                    In Progress
+                </div>
+                <div class="sticky-space">
+                    <div class="sticky-note note-orange">
+                        Note 5
+                    </div>
+                    <div class="sticky-note note-red">
+
+                    </div>
+                    <div class="sticky-note note-orange">
+                        Note 6
+                    </div>
+                    <div class="sticky-note note-green">
+                        Note 7
+                    </div>
+                </div>
+            </div>
+            <div class="column" id="done">
+                <div class="board-header">
+                    Done
+                </div>
+                <div class="sticky-space">
+                        <div class="sticky-note note-green">
+                            Note 8
+                        </div>
+                        <div class="sticky-note note-green">
+                            Note 9
+                        </div>   
+                </div>
+            </div>
+        </div>
+        <script src="sticky-notes-controller.js"></script>
+        <script src="taskboard-controller.js"></script>
+    </body>
+</html>

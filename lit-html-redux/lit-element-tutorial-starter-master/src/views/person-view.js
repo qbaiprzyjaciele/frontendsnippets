@@ -53,8 +53,8 @@ class PersonView extends LitElement {
                     <div class="person-item">
                         <vaadin-checkbox
                          ?checked="${p.job === 'Developer'}"
-                         @change="${e => this.updatePerson(p.person, e.target.checked)}"
-                         >${p.person}</vaadin-button>
+                         @change="${e => this.updatePerson(p, e.target.checked)}"
+                         >${p.person} - ${p.job}</vaadin-button>
                     <div>
                 `)}
             </div>
@@ -63,7 +63,7 @@ class PersonView extends LitElement {
 
     updatePerson(updatedPerson, developer) {
         this.persons = this.persons.map( p => {
-            return updatedPerson === p ? {...p, job: develper ? 'Developer' : 'Tester'} : p;
+            return updatedPerson === p ? {...p, job: developer ? 'Developer' : 'Tester'} : p;
         });
     }
 

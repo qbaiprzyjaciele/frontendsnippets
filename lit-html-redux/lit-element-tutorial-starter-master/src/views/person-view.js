@@ -15,11 +15,7 @@ const VisibilityFilters = {
 
 class PersonView extends LitElement {
 
-    render() {
-        return html`
-            <p> ${this.model.name} ${this.model.lastName} </p>
-        `;
-    }
+    
 
     static get properties() {
         return {
@@ -43,13 +39,18 @@ class PersonView extends LitElement {
 
     render() { 
         return html`
-            <div class="input-layout">
-                <vaadin-text-field placeholder="Person" value=${this.personName} @change=${this.updatePersonName}></vaadin-text-field>
-                <vaadin-button theme="primary" @click="${this.addPerson}">Add</vaadin-button>
+            <div class="input-layout" @keyup="${this.shortcutListener}">
+                <vaadin-text-field 
+                    placeholder="Person" 
+                    value=${this.personName} 
+                    @change=${this.updatePersonName}
+                ></vaadin-text-field>
+                <vaadin-button theme="primary" @click="${this.addPerson}"
+                >Add</vaadin-button>
             </div>
 
             <div class="person-list">
-                ${this.persons.map(p => html`
+                ${this.applyFilter(this.persons).map(p => html`
                     <div class="person-item">
                         <vaadin-checkbox
                          ?checked="${p.job === 'Developer'}"
@@ -58,7 +59,39 @@ class PersonView extends LitElement {
                     <div>
                 `)}
             </div>
+
+            <vaadin-radio-group
+                class="visibility-filters"
+                value="${this.filter}"
+                @value-changed="${this.filterChanged}"
+            >
+                ${Object.values(VisibilityFilters).map(filter => html`
+                    <vaadin-radio-button value="${filter}">${filter}</vaadin-radio-button>
+                `)}
+            </vaadin-radio-group>      
+            <vaadin-button @click="${this.clearDevelopers}">
+                Clear Developers
+            </vaadin-buttom>
         `;
+    }
+
+    clearDevelopers(e) {
+        this.persons = this.persons.filter(person => person.job !== 'Developer');
+    }
+
+    filterChanged(e) {
+        this.filter = e.target.value;
+    }
+
+    applyFilter(persons) {
+        switch(this.filter) {
+            case VisibilityFilters.SHOW_DEVELOPERS:
+                return persons.filter(person => person.job === 'Developer');
+            case VisibilityFilters.SHOW_TESTERS:
+                return persons.filter(person => person.job === 'Tester');
+            default:
+                return persons;
+        }
     }
 
     updatePerson(updatedPerson, developer) {
@@ -79,6 +112,12 @@ class PersonView extends LitElement {
             }];
         }
         this.personName = '';   
+    }
+
+    shortcutListener(e) {
+        if(e.key === 'Enter') {
+            this.addPerson();
+        }
     }
 }
 

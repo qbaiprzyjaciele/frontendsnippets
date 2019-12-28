@@ -4,18 +4,12 @@ import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-radio-button/vaadin-radio-button';
 import '@vaadin/vaadin-radio-button/vaadin-radio-group';
+import { connect } from 'pwa-helpers';
+import { store } from '../redux/store.js';
 
-
-const VisibilityFilters = {
-    SHOW_ALL:'All',
-    SHOW_DEVELOPERS: 'Developer',
-    SHOW_TESTERS: 'Tester'
-}
-
+import { VisibilityFilters } from '../redux/reducer.js';
 
 class PersonView extends LitElement {
-
-    
 
     static get properties() {
         return {
@@ -24,6 +18,11 @@ class PersonView extends LitElement {
             filter: {type: String },
             personName: {type: String }
         };
+    }
+
+    stateChanged(state) {
+        this.persons = state.perons;
+        this.filter = state.filter;
     }
 
     constructor() {

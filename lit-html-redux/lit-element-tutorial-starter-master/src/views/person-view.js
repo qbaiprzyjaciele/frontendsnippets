@@ -4,12 +4,13 @@ import '@vaadin/vaadin-button';
 import '@vaadin/vaadin-checkbox';
 import '@vaadin/vaadin-radio-button/vaadin-radio-button';
 import '@vaadin/vaadin-radio-button/vaadin-radio-group';
+import { VisibilityFilters } from '../redux/reducer.js';
 import { connect } from 'pwa-helpers';
 import { store } from '../redux/store.js';
 
-import { VisibilityFilters } from '../redux/reducer.js';
 
-class PersonView extends LitElement {
+
+class PersonView extends connect(store)(LitElement) {
 
     static get properties() {
         return {

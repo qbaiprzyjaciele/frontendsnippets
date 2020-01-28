@@ -45,10 +45,27 @@ class PersonView extends LitElement {
         return html`
             <div class="input-layout">
                 <vaadin-text-field placeholder="Person" value=${this.personName} @change=${this.updatePersonName}></vaadin-text-field>
-                <vaadin-button theme="primary" @click="${this.addPerson}"></vaadin-button>
-
+                <vaadin-button theme="primary" @click="${this.addPerson}">Add</vaadin-button>
             </div>
+
+            <div class="person-list">
+                ${this.persons.map(p => html `
+                    <div class="person-item">
+                        <vaadin-checkbox
+                         ?checked="${p.title === 'Developer'}"
+                         @change="${this.updatePerson(person, e.target.checked)}"
+                         >${todo.task}</vaadin-button>
+                    <div>
+                `)}
+            </div>
+            
         `;
+    }
+
+    updatePerson(updatedPerson, developer) {
+        this.persons = this.persons.map( p => {
+            return updatedPerson === p ? {...p, title: develper ? 'Developer' : 'Tester'} : p;
+        });
     }
 
     updatePersonName(e) {
@@ -62,7 +79,7 @@ class PersonView extends LitElement {
                 job: 'Developer'
             }];
         }
-        this.personName = '';
+        this.personName = '';   
     }
 }
 

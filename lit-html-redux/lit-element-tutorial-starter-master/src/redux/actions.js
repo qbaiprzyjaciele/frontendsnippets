@@ -11,7 +11,7 @@ export const addPerson = person => {
         person: {
             id: nanoid(),
             person,
-            job: 'Developer'
+            job
         }
     }
 }

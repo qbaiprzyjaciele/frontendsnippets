@@ -12,11 +12,12 @@ export const VisibilityFilters = {
 };
 
 const INITIAL_STATE = {
-    persons: [],
+    persons: [{person:'Jan Mrągowski', job:'Developer'}],
     filter: VisibilityFilters.SHOW_ALL
 };
 
 export const reducer = (state = INITIAL_STATE, action) => {
+    console.log(`reduce = state =${JSON.stringify(state)}`);
     switch(action.type) {
         default:
             return state;

@@ -22,8 +22,10 @@ class PersonView extends connect(store)(LitElement) {
     }
 
     stateChanged(state) {
-        this.persons = state.perons;
+        console.log(`state = ${JSON.stringify(state)}`);
+        this.persons = state.persons;
         this.filter = state.filter;
+        console.log('this.persons = ' + JSON.stringify(this.persons));
     }
 
     constructor() {
@@ -84,6 +86,7 @@ class PersonView extends connect(store)(LitElement) {
     }
 
     applyFilter(persons) {
+        console.log(`applyFilter-persons = ${JSON.stringify(persons)}`)
         switch(this.filter) {
             case VisibilityFilters.SHOW_DEVELOPERS:
                 return persons.filter(person => person.job === 'Developer');

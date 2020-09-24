@@ -10,8 +10,8 @@ export const addPerson = person => {
         type: ADD_PERSON,
         person: {
             id: nanoid(),
-            person,
-            job
+            person: person.person,
+            job: person.job,
         }
     }
 }

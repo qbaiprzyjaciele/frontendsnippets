@@ -7,10 +7,10 @@ import '@vaadin/vaadin-radio-button/vaadin-radio-group';
 import { VisibilityFilters } from '../redux/reducer.js';
 import { connect } from 'pwa-helpers';
 import { store } from '../redux/store.js';
+import { addPerson } from '../redux/actions.js';
 
 
-
-class PersonView extends connect(store)(LitElement) {
+ class PersonView extends connect(store)(LitElement) {
 
     static get properties() {
         return {
@@ -108,12 +108,10 @@ class PersonView extends connect(store)(LitElement) {
     }
 
     addPerson() {
-        if(this.personName) {
-            this.persons = [... this.persons, {
-                person: this.personName,
-                job: 'Developer'
-            }];
-        }
+        store.dispatch(addPerson({
+            person: this.personName,
+            job: 'Developer'
+        }));
         this.personName = '';   
     }
 

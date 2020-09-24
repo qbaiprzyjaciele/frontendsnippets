@@ -19,6 +19,12 @@ const INITIAL_STATE = {
 export const reducer = (state = INITIAL_STATE, action) => {
     console.log(`reduce = state =${JSON.stringify(state)}`);
     switch(action.type) {
+        case ADD_PERSON: {
+           return {
+                ...state,
+                persons: [...state.persons, action.person],
+           } 
+        }
         default:
             return state;
     }

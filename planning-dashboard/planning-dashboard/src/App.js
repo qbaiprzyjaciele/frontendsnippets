@@ -1,24 +1,24 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import MainDashboard from './containers/MainDashboard';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <MainDashboard articles={
+        [{
+          id:1,
+          type: 'simple',
+          title: 'Title #1',
+          content: 'Whatever content',
+        }, {
+          id:2,
+          type: 'image',
+          title: 'Whatever titile',
+          img: 'img#1'
+        }]
+      } />
     </div>
   );
 }

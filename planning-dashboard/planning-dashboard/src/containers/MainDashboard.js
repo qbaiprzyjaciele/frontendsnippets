@@ -2,6 +2,7 @@ import React from 'react';
 import SimpleArticle from '../component/SimpleArticle.js';
 import ImageHeader from '../component/ImageHeader.js';
 import Card from '../component/Card.js';
+import AutocompleteInput from '../component/AutocompleteInput';
 
 export default class MainDashboard extends React.Component {
 
@@ -17,8 +18,13 @@ export default class MainDashboard extends React.Component {
     render() {
         return (
             <div>
-                <div> {this.renderFilterTab()} </div>
-                <div> {this.props.articles.filter(a => this.applyFilters(a, this.state.filters)).map(this.renderArticle)} </div>
+                <div>
+                    <div> {this.renderFilterTab()} </div>
+                    <div> {this.props.articles.filter(a => this.applyFilters(a, this.state.filters)).map(this.renderArticle)} </div>
+                </div>
+                <div>
+                    <AutocompleteInput></AutocompleteInput>
+                </div>
             </div>
         );
     }

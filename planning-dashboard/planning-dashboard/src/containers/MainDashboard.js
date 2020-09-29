@@ -25,6 +25,10 @@ export default class MainDashboard extends React.Component {
                 <div>
                     <AutocompleteInput></AutocompleteInput>
                 </div>
+                <div> Other Element</div>
+                <div> Other Element 2</div>
+                <div> Other Element 3</div>
+                <div> Other Element 4</div>
             </div>
         );
     }

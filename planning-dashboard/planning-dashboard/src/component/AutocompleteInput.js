@@ -13,6 +13,7 @@ export default class AutocompleteInput extends React.Component {
         this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
         this.keyDownHandler = this.keyDownHandler.bind(this);
         this.selectItem = this.selectItem.bind(this);
+        this.clearAutocompleteItems = this.clearAutocompleteItems.bind(this);
         this.Keys = {
             UP: 38,
             DOWN: 40,
@@ -22,14 +23,14 @@ export default class AutocompleteInput extends React.Component {
     render() {
         return(
             <div>
-                <input type="text" onKeyUp={this.handleInputKeyUp} onKeyDown={this.keyDownHandler}>
+                <input type="text" onKeyUp={this.handleInputKeyUp} onKeyDown={this.keyDownHandler} onBlur={this.clearAutocompleteItems} >
                 </input>
                 { this.state.items ? 
                 <div className="autocomplete-items-container">
                     {
                         this.state.items.map((value, index) => {
                             return (
-                                <div key={value} onMouseOver={this.selectItem.bind(this, index)} >
+                                <div key={value} onMouseOver={this.selectItem.bind(this, index)}>
                                     <AutocompleteItem  content={value} selected={this.state.selectedItemIndex === index}></AutocompleteItem>
                                 </div>
                             );
@@ -53,6 +54,9 @@ export default class AutocompleteInput extends React.Component {
 
     keyDownHandler(e) {
         console.log(`keyDownHandler = ${e.which}`);
+        if(e.which === this.Keys.UP && this.state.selectedItemIndex === 0) {
+            this.selectItem(-1);
+        }
         if(e.which === this.Keys.UP && this.state.selectedItemIndex > 0) {
             this.selectItem(this.state.selectedItemIndex - 1);
         }
@@ -68,6 +72,7 @@ export default class AutocompleteInput extends React.Component {
     }
 
     clearAutocompleteItems() {
+        console.log('clearAutocompleteItems');
         this.setState({
             items: null,
             selectedItemIndex:-1,

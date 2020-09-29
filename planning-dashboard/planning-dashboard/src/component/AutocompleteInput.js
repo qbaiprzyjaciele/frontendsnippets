@@ -1,22 +1,42 @@
 import React from 'react';
-import AutocompleteList from './AutocompleteList.js';
+import AutocompleteItem from './AutocompleteItem.js';
+import './AutocompleteInput.css';
 
 export default class AutocompleteInput extends React.Component {
     
     constructor(props) {
         super(props)
         this.state = {
-            autocompleteItems: null,
-        };
+            items: null,
+            selectedItemIndex: -1,
+        }
         this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
+        this.keyDownHandler = this.keyDownHandler.bind(this);
+        this.selectItem = this.selectItem.bind(this);
+        this.Keys = {
+            UP: 38,
+            DOWN: 40,
+        }
     }
 
     render() {
         return(
             <div>
-                <input type="text" onKeyUp={this.handleInputKeyUp}>
+                <input type="text" onKeyUp={this.handleInputKeyUp} onKeyDown={this.keyDownHandler}>
                 </input>
-                { this.state.autocompleteItems ? <AutocompleteList  items={this.state.autocompleteItems}></AutocompleteList> : null }
+                { this.state.items ? 
+                <div className="autocomplete-items-container">
+                    {
+                        this.state.items.map((value, index) => {
+                            return (
+                                <div key={value} onMouseOver={this.selectItem.bind(this, index)} >
+                                    <AutocompleteItem  content={value} selected={this.state.selectedItemIndex === index}></AutocompleteItem>
+                                </div>
+                            );
+                        })
+                    } 
+                </div>
+                 : null }
             </div>
         );
     }
@@ -31,9 +51,26 @@ export default class AutocompleteInput extends React.Component {
         }
     }
 
+    keyDownHandler(e) {
+        console.log(`keyDownHandler = ${e.which}`);
+        if(e.which === this.Keys.UP && this.state.selectedItemIndex > 0) {
+            this.selectItem(this.state.selectedItemIndex - 1);
+        }
+        else if(e.which === this.Keys.DOWN && this.state.selectedItemIndex < this.state.items.length) {
+            this.selectItem(this.state.selectedItemIndex + 1);
+        }
+    }
+
+    selectItem(index) {
+        this.setState( {
+            selectedItemIndex: index,
+        });
+    }
+
     clearAutocompleteItems() {
         this.setState({
-            autocompleteItems: null,
+            items: null,
+            selectedItemIndex:-1,
         });
     }
     
@@ -50,7 +87,7 @@ export default class AutocompleteInput extends React.Component {
         ];
         const newItems = items.filter(item => item.includes(inputValue));
         this.setState({
-            autocompleteItems: newItems,
+            items: newItems,
         });
     }
 }

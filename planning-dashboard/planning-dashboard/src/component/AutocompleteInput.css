@@ -1,0 +1,7 @@
+.autocomplete-items-container {
+    border-color:black;
+    border-style: solid;
+    z-index:599;
+    position: absolute;
+    background-color:white;
+}

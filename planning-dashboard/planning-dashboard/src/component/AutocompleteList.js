@@ -17,6 +17,11 @@ export default class AutocompleteList extends React.Component {
         }
     }
 
+    componentWillReceiveProps(props) {
+        console.log(`componentWillReceiveProps = ${JSON.stringify(props)}`);
+        this.setState({items: props.items, selectedItemIndex:-1});
+    }
+
     render() {
         return (
             <ul onKeyDown={this.keyDownHandler}>
@@ -36,6 +41,7 @@ export default class AutocompleteList extends React.Component {
     }
 
     keyDownHandler(e) {
+        console.log(`keyDownHandler = ${e.which}`);
         if(e.which === this.Keys.UP && this.state.selectedItemIndex > 0) {
             this.selectItem(this.state.selectedItemIndex - 1);
         }

@@ -9,9 +9,6 @@ export default class AutocompleteInput extends React.Component {
             autocompleteItems: null,
         };
         this.handleInputKeyUp = this.handleInputKeyUp.bind(this);
-        this.updateItems = function() {
-            this.setState()
-        }
     }
 
     render() {
@@ -19,7 +16,7 @@ export default class AutocompleteInput extends React.Component {
             <div>
                 <input type="text" onKeyUp={this.handleInputKeyUp}>
                 </input>
-                { this.state.autocompleteItems ? <AutocompleteList updateItems={} items={this.state.autocompleteItems}></AutocompleteList> : null }
+                { this.state.autocompleteItems ? <AutocompleteList  items={this.state.autocompleteItems}></AutocompleteList> : null }
             </div>
         );
     }

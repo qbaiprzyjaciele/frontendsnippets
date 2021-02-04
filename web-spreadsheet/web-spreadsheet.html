@@ -289,6 +289,18 @@
             cells[0][1].value + cells[0][2].value,
           formulaDependencies: [ [0,1], [0,2] ],
         });
+        
+        addFormula(2, 4, {
+          formulaExpression: cells => 
+            cells[0][1].value + cells[0][2].value + cells[4][2].value,
+          formulaDependencies: [ [0,1], [0,2], [4,2] ],
+        });
+        
+        addFormula(5,1, {
+          formulaExpression: cells => 
+            cells[2][4].value + cells[0][2].value + cells[4][2].value,
+          formulaDependencies: [ [2,4], [0,2], [4,2] ],
+        });
       }
      
       static get properties() {

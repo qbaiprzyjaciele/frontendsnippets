@@ -301,6 +301,16 @@
             cells[2][4].value + cells[0][2].value + cells[4][2].value,
           formulaDependencies: [ [2,4], [0,2], [4,2] ],
         });
+        
+        addFormula(7,0, {
+          formulaExpression: cells => 
+            cells[6][0].value + cells[5][1].value,
+          formulaDependencies: [ [6,0], [5,1] ],
+        });
+        
+        const findCycles = () => {
+          // [0,1] dependencies.. ([0,3], [0.7]).. if ([0,3].formula &&  [0,3].formula.formulaDepenecies.contains([0,1])
+        };
       }
      
       static get properties() {
@@ -350,6 +360,7 @@
         const elementToUpdate = this.shadowRoot.getElementById(`cell_${row}_${column}`);
         console.log(`sync down row=${row} column=${column}`, elementToUpdate);
         elementToUpdate.value = value;
+        elementToUpdate.onChange({target:elementToUpdate});
       }
       
       updateObserverValue(observerRow, observerColumn) {

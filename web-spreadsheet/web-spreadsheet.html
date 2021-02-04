@@ -98,33 +98,34 @@
       constructor() {
         super();
         
-        this.subscribersMap = {};
+        this.subscribersMap = [];
       
         const addSubscription = (subscribeToX, subscribeToY, observerX, observerY) =>  {
           //this.subscribersMap[subscribeToX][subscribeToY] = ;
-          if(!this.subscriberMap[subscribeToX]) {
-            this.subscriberMap[subscribeToX] = {};
+          if(!this.subscribersMap[subscribeToX]) {
+            this.subscribersMap[subscribeToX] = [];
           }
-          if(!this.subscriberMap[subscribeToX][subscribeToY]) {
-            this.subscriberMap[subscribeToX][subscribeToY] = [];
+          if(!this.subscribersMap[subscribeToX][subscribeToY]) {
+            this.subscribersMap[subscribeToX][subscribeToY] = [];
           }
-          this.subscriberMap.length 
-          for(let i=0; i<this.subscriberMap[subscribeToX][subscribeToY].length; i++) {
-            const [ existingSubscriberX, existingSubscriberY] = this.subscriberMap[subscribeToX][subscribeToY][i];
+          this.subscribersMap.length 
+          for(let i=0; i<this.subscribersMap[subscribeToX][subscribeToY].length; i++) {
+            const [ existingSubscriberX, existingSubscriberY] = this.subscribersMap[subscribeToX][subscribeToY][i];
             if(existingSubscriberX == observerX && observerY == existingSubscriberY) {
               // observer already added
               return;
             }
+            
           }
-          this.subscriberMap[subscribeToX][subscribeToY].push([observerX, observerY]);
+          this.subscribersMap[subscribeToX][subscribeToY].push([observerX, observerY]);
         }
         
         const addFormula = (x, y, formula) => {
           this.cells[x][y].formula = formula;
           formula.formulaDependencies.forEach(dep => {
-            addSubscription([...dep]);
+            addSubscription(dep[0], dep[1], x, y);
           });
-          this.cells.value = this.cells.formula.formulaExpression(this.cells);
+          this.cells[x][y].value = this.cells[x][y].formula.formulaExpression(this.cells);
         }
         
         const updateValue = (x,y, value) => {
@@ -147,12 +148,7 @@
             { value: 324.83, formula: null },
             { 
              value: null, 
-             formula: {
-               formulaExpression: (cells) => {
-                cells[0][1] + cells[0][2];
-              },
-              formulaDependencies: [ [0,1], [0,2] ],
-             },
+             formula: null,
             },
           ],
           [
@@ -286,7 +282,13 @@
             { value: 324.83, formula: null },
             { value: 324.83, formula: null },
           ],
-        ]
+        ];
+        
+        addFormula(1, 5, {
+          formulaExpression: cells => 
+            cells[0][1].value + cells[0][2].value,
+          formulaDependencies: [ [0,1], [0,2] ],
+        });
       }
      
       static get properties() {
@@ -299,7 +301,7 @@
           },
         }
       }     
-      
+     
       render() {
         return html`<table>
           ${this.cells.map((row, index) => html`<tr>${this.renderRow(row, index)}</tr>`)}
@@ -315,15 +317,18 @@
 //       }
       
       
-      notifyValueChange(row,column, value) {
+      notifyValueChange(row, column, value) {
+        console.log(`notifyValuechange ${row} ${column} ${value}`);
         //syncup
-        this.cells[row][column] = value;
+        
+        this.cells[row][column].value = parseFloat(value);
         if(this.subscribersMap[row]) {
           if(this.subscribersMap[row][column]) {
+            console.log('found obswervers');
             this.subscribersMap[row][column].forEach( observer => {
               const [observerRow, observerColumn] = observer;
+              console.log(`updating ${observerRow} ${observerColumn}`)
               this.updateObserverValue(observerRow, observerColumn);
-              
             });
           }
         }
@@ -331,18 +336,20 @@
       
       syncDown(row, column, value) {
         const elementToUpdate = this.shadowRoot.getElementById(`cell_${row}_${column}`);
+        console.log(`sync down row=${row} column=${column}`, elementToUpdate);
         elementToUpdate.value = value;
       }
       
       updateObserverValue(observerRow, observerColumn) {
         const cell = this.cells[observerRow][observerColumn];
         const { formula } = cell;
+        console.log('cell: ', cell);
+        console.log(`updateObserverValue formula`, formula, this.cells);
         const value = formula.formulaExpression(this.cells);
+        console.log(`updateObserverValue value=${value}`);
         cell.value = value;
         this.syncDown(observerRow, observerColumn, value);
       }
-      
-     
       
       renderRow(row, rowIndex) {
         return html`
@@ -350,7 +357,7 @@
          <td>
           <spread-sheet-input id=${`cell_${rowIndex}_${index}`} .value=${cell.value} .onChange=${(e) => { 
             console.log(`changed = ${e.target.value}`);
-            this.notifyValueChange(rowIndex, index); 
+            this.notifyValueChange(rowIndex, index, e.target.value); 
           }}>
           </spread-sheet-input>
          </td>`)}

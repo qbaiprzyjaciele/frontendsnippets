@@ -1,0 +1,196 @@
+<html>
+  <head>
+    <script>
+      
+     const exampleExp = 'A + B * C + (32 + F)';
+      
+     const nextNonWhite = (expression, index) => {
+      console.log(`nextNonWhite index= ${index}`);
+      let i = index;
+      const lastIndex = expression.length-1;
+      while((
+        expression[i] == ' ' || 
+        expression[i] == '\t' ||
+        expression[i] == '\n' 
+      ) && i < lastIndex) i++;
+      return i;
+     }
+     
+     function tokenList()  {
+       var tokens = [];
+       return {
+         addToken: function(token, type, startIndex, endIndex) {
+           console.log(`addToken token=${token} type=${type} startIndex=${startIndex} endIndex=${endIndex} `);
+           tokens.push({
+             token, 
+             type, 
+             startIndex, 
+             endIndex,
+           });
+         },
+         getTokens: function() { 
+           return [ ...tokens ];
+         },
+       };
+       
+     };
+      
+      const processVariableOrFunctionName = (expression, index) => {
+       let i = index;
+       const lastIndex = expression.length-1;
+       while((!isEmpty(expression[i]) && !isOperator(expression[i])) && i < lastIndex) i++;
+      return i;
+     }
+      
+     const processOperator = (expression, index) => {
+       return index + 1;
+     }
+      
+     const processNumeric = (expression, index) => {
+       let i = index;
+       const lastIndex = expression.length - 1;
+       while((!isEmpty(expression[i]) && 
+             !isOperator(expression[i]) && 
+             isPartOfTheNumeric(expression[i])
+       ) && i < lastIndex ) i++;
+       return i;
+     }
+     
+     const TOKEN_PROCESSORS = {
+       'VARIABLE_NAME_OR_FUNCTION': processVariableOrFunctionName,
+       'OPERATOR': processOperator,
+       'NUM_CONSTANT': processNumeric,
+     };
+     
+     
+     
+     const isPartOfTheNumeric = (token) => {
+       return token == '.' || isNumeric(token) || token == ',';
+     }
+       
+     const isNumeric  = (token) => {
+       return ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(token);
+     }
+     
+     const isLetter  = (tokenStart) => {
+        const charCode = tokenStart.charCodeAt(0);
+        return (charCode >=  65 && charCode < 91) ||
+          (charCode >= 97 && charCode < 123)
+     }
+     
+     const isOperator = (token) => {
+       return (
+          token == '*' || 
+          token == '+' || 
+          token == '-' || 
+          token == '(' || 
+          token == ')');
+     }
+      
+      const isEmpty = (token) => { 
+        return token == ' ' || token == '\t' || token == '\n';
+      }
+     
+     const determineTokenType = (tokenStart) => {
+       if(isLetter(tokenStart)) {
+         return 'VARIABLE_NAME_OR_FUNCTION';
+       }
+       else if(isOperator(tokenStart)) {
+         return 'OPERATOR';
+       }
+       else if(isNumeric(tokenStart)) {
+        return 'NUM_CONSTANT';
+       }
+     }
+     
+     const buildParseTree = (tokens) => {
+       
+     }
+      
+     function parseTree() {
+       var root = {};
+       currenttree
+       return {
+         addChild: () => {
+           
+         },
+         getChildren: () => {
+           
+         }
+       }
+     }
+      
+     const lexer = (expression) => {  
+        const tokens = tokenList();
+        // const termStart = nextNonWhite(expression);
+        // const firstChar = expression[termStart];
+        // const tokenType = determineTokenType(firstChar);
+        // const tokenProcessor = TOKEN_PROCESSORS[tokenType];
+        // const tokenEnd = tokenProcessor(expression, termStart);
+        // const token = extractToken(termStart, tokenEnd);
+        let currentPos = 0;
+        while(currentPos != expression.length-1) {
+          if(isEmpty(expression[currentPos])) {
+            currentPos = nextNonWhite(expression, currentPos);
+          }
+          else {
+            const tokenStart = currentPos;
+            const tokenType = determineTokenType(expression[currentPos]);
+            console.log(`tokenType = ${tokenType}`);
+            const tokenProcessor = TOKEN_PROCESSORS[tokenType];
+            const processedIndex = tokenProcessor(expression, currentPos);
+            currentPos = processedIndex;
+            const tokenEnd  = processedIndex == expression.length-1 ? processedIndex : processedIndex-1;
+            console.log(`tokenType = ${tokenType} tokenStart=${tokenStart} tokenEnd=${processedIndex-1}`);
+            tokens.addToken('', tokenType, tokenStart, tokenEnd);
+          }
+        }
+       return tokens;
+     }
+      
+     function writeOutput(out) {
+       document.getElementById("output").innerHTML += `<br>${out}</br>`;
+     }
+      
+     function test1ProcessVariableOrFunctionName() {
+       const variableEnd  = processVariableOrFunctionName(' A1+AB', 1);
+       console.log(`variableEnd = ${variableEnd}`);
+       writeOutput(`variableEnd = ${variableEnd}`) ;
+       
+       const variableEnd2 = processVariableOrFunctionName(' A1+AB', 4);
+       console.log(`variableEnd2 = ${variableEnd2}`);
+       writeOutput(`variableEnd2 = ${variableEnd2}`) ;
+     }     
+      
+     function test2nextNonWhite() {
+       const nextNoneWhiteIndex = nextNonWhite('  AB1   + AB23', 0);
+       console.log(`nextNoneWhiteIndex = ${nextNoneWhiteIndex}`);
+       writeOutput(`nextNoneWhiteIndex = ${nextNoneWhiteIndex}`);
+       
+       console.log(`nextNoneWhiteIndex2 = ${nextNonWhite('  AB1   + AB23', 3)}`);
+       writeOutput(`nextNoneWhiteIndex2 = ${nextNonWhite('  AB1   + AB23', 3)}`);
+       
+       
+       console.log(`nextNoneWhiteIndex2 = ${nextNonWhite('  AB1   + AB23', 5)}`);
+       writeOutput(`nextNoneWhiteIndex2 = ${nextNonWhite('  AB1   + AB23', 5)}`);
+     }
+      
+     function testLexer() {
+       const extractedTokens = lexer('  A1212*BS323+323.32+(WQA + DSA) + 5');
+       console.log(`extracted tokens = ${JSON.stringify(extractedTokens.getTokens())}`);
+       console.log(`extractedTokens = ${extractedTokens}`);
+       writeOutput(`extractedTokens = ${JSON.stringify(extractedTokens)}`);
+     }
+      
+     window.onload = function () {
+       test1ProcessVariableOrFunctionName();
+       test2nextNonWhite();
+       testLexer();
+     }
+     
+    </script>
+  </head>
+  <body>
+    <p id="output" ></p>
+  </body>
+</html>

@@ -62,7 +62,14 @@
        'NUM_CONSTANT': processNumeric,
      };
      
-     
+     const buildInFunctions = {
+       SUM: {
+         
+       },
+       AVG: {
+         
+       },
+     }
      
      const isPartOfTheNumeric = (token) => {
        return token == '.' || isNumeric(token) || token == ',';
@@ -120,6 +127,9 @@
        }
      }
       
+      
+
+      
      const lexer = (expression) => {  
         const tokens = tokenList();
         // const termStart = nextNonWhite(expression);
@@ -133,7 +143,7 @@
           if(isEmpty(expression[currentPos])) {
             currentPos = nextNonWhite(expression, currentPos);
           }
-          else {
+          //else {
             const tokenStart = currentPos;
             const tokenType = determineTokenType(expression[currentPos]);
             console.log(`tokenType = ${tokenType}`);
@@ -142,8 +152,8 @@
             currentPos = processedIndex;
             const tokenEnd  = processedIndex == expression.length-1 ? processedIndex : processedIndex-1;
             console.log(`tokenType = ${tokenType} tokenStart=${tokenStart} tokenEnd=${processedIndex-1}`);
-            tokens.addToken('', tokenType, tokenStart, tokenEnd);
-          }
+            tokens.addToken(expression.substring(tokenStart, tokenEnd+1), tokenType, tokenStart, tokenEnd);
+          //}
         }
        return tokens;
      }
@@ -179,13 +189,21 @@
        const extractedTokens = lexer('  A1212*BS323+323.32+(WQA + DSA) + 5');
        console.log(`extracted tokens = ${JSON.stringify(extractedTokens.getTokens())}`);
        console.log(`extractedTokens = ${extractedTokens}`);
-       writeOutput(`extractedTokens = ${JSON.stringify(extractedTokens)}`);
+       writeOutput(`extractedTokens = ${JSON.stringify(extractedTokens.getTokens())}`);
+     }
+     //unary if previous is NONE OR OPERATOR AND NEXT IS NUM_CONSTAN OR T VARIABLE_OR_FUNCTION
+     function testLexter2() {
+       const extractedTokens = lexer(exampleExp);
+       console.log(`extracted tokens = ${JSON.stringify(extractedTokens.getTokens())}`);
+       console.log(`extractedTokens = ${extractedTokens}`);
+       writeOutput(`extractedTokens = ${JSON.stringify(extractedTokens.getTokens())}`);
      }
       
      window.onload = function () {
        test1ProcessVariableOrFunctionName();
        test2nextNonWhite();
        testLexer();
+       testLexter2();
      }
      
     </script>
